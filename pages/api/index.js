@@ -6,7 +6,7 @@ async function handler(req, res) {
   );
   const db = client.db();
   const todosCollection = db.collection("todos");
-  
+
   if (req.method === "POST") {
     const data = req.body;
     console.log(data);
@@ -21,6 +21,15 @@ async function handler(req, res) {
     console.log(result);
     client.close();
     res.status(201).json({ message: "Todo deleted!" });
+  } else if (req.method === "PUT") {
+    const id = req.query;
+    const data = req.body;
+    const result = await todosCollection.updateOne(
+      { _id: new ObjectId(id) },
+      { $set: { status: data.status } }
+    );
+    client.close();
+    res.status(200).json({ message: "Todo updated!" });
   }
 }
 

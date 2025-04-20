@@ -39,9 +39,18 @@ function HomePage(props) {
     setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
   }
 
-  const completeTodoHandler = (id, task) => {
-    deleteTodosHandler(id);
-    // setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
+  const completeTodoHandler = async (id, task) => {
+    const response = await fetch(`/api/?id=${id}`, {
+      method: "PUT",
+      body: JSON.stringify({ status: "completed" }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+
+    setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
+
     setCompletedTodos((prevCompletedTodos) => [
       ...prevCompletedTodos,
       { id, task },
