@@ -11,9 +11,9 @@ function TodoForm(props) {
   const formSubmitHandler = (event) => {
     event.preventDefault();
 
-    const task = enteredTask;
+    const tasks = { task: enteredTask, status: "incomplete" };
 
-    props.onAddTodo({task});
+    props.onAddTodo(tasks);
 
     setEnteredTask("");
     props.onClose();
