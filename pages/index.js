@@ -1,6 +1,7 @@
 import TodoForm from "@/components/TodoForm";
 import TodoList from "@/components/TodoList";
 import { MongoClient } from "mongodb";
+import Link from "next/link";
 import { useState } from "react";
 import { Button } from "react-bootstrap";
 
@@ -65,8 +66,11 @@ function HomePage(props) {
         onDelete={deleteTodosHandler}
         onComplete={completeTodoHandler}
       />
-      <h1>Completed Tasks</h1>
-      <TodoList todos={completedTodos} onDelete={deleteTodosHandler} />
+      <Link href="/completed">
+        <Button variant="outline-success" style={{ margin: "10px" }}>
+          View Completed Tasks
+        </Button>
+      </Link>
       {!showTaskForm ? (
         <Button variant="outline-primary" onClick={showTaskHandler}>
           Add Tasks
@@ -84,7 +88,7 @@ export async function getStaticProps() {
   );
   const db = client.db();
   const todosCollection = db.collection("todos");
-  const todos = await todosCollection.find().toArray();
+  const todos = await todosCollection.find({ status: "Incomplete" }).toArray();
   client.close();
   return {
     props: {
